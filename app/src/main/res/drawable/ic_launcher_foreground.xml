@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Ein silberner Zirkel, der einen goldenen Kreisbogen zieht, mit einem Stern am Gelenk. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <!-- goldener Kreisbogen -->
+    <path
+        android:pathData="M34,74 A22,22 0 0 0 74,74"
+        android:strokeColor="#F2C14E"
+        android:strokeLineCap="round"
+        android:strokeWidth="3.2" />
+    <!-- Schenkel des Zirkels -->
+    <path
+        android:pathData="M54,37 L39,74"
+        android:strokeColor="#E8ECF8"
+        android:strokeLineCap="round"
+        android:strokeWidth="4.2" />
+    <path
+        android:pathData="M54,37 L69,74"
+        android:strokeColor="#E8ECF8"
+        android:strokeLineCap="round"
+        android:strokeWidth="4.2" />
+    <!-- Stern am Gelenk -->
+    <path
+        android:fillColor="#F2C14E"
+        android:pathData="M54,24 L56.9,32.1 L65.4,32.3 L58.6,37.5 L61.1,45.7 L54,40.8 L46.9,45.7 L49.4,37.5 L42.6,32.3 L51.1,32.1 Z" />
+</vector>
