@@ -213,7 +213,7 @@
     o = o || {};
     return { type: type, q: T(q), sol: o.sol ? T(o.sol) : '', hint: o.hint ? T(o.hint) : '', fig: o.fig || '' };
   }
-  function plain(html) { return String(html).replace(/<[^>]*>/g, '').replace(/\s+/g, ''); }
+  function plain(html) { return String(html).replace(/<span class="per">(\d+)<\/span>/g, '[$1]').replace(/<[^>]*>/g, '').replace(/\s+/g, ''); }
 
   /* Auswahlaufgabe: eine richtige, mehrere falsche Antworten (werden gemischt) */
   SZ.MC = function (q, correct, wrongs, o) {

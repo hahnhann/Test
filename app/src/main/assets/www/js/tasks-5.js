@@ -223,6 +223,7 @@
   G('5-dezimal', 2, function () {
     var x = R.pick([R.int(11, 999) / 10, R.int(11, 999) / 100, R.int(2, 99) / 1000]), k = R.pick([10, 100, 1000]), mul = R.bool();
     var r = M.round(mul ? x * k : x / k, 6), st = String(k).length - 1;
+    if (M.round(r, 4) !== r) return null;
     return NUM('Berechne: $' + de(x) + (mul ? ' * ' : ' : ') + de(k) + '$', r, { sol: 'Das Komma rückt um ' + st + ' Stelle' + (st > 1 ? 'n' : '') + ' nach ' + (mul ? 'rechts' : 'links') + ': $' + de(r) + '$.', hint: 'Zähle die Nullen der Zehnerpotenz – so weit wandert das Komma.' });
   });
   G('5-dezimal', 2, function () {

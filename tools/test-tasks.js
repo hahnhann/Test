@@ -2,7 +2,7 @@
 // Aufruf: node tools/test-tasks.js [Anzahl Durchläufe je Generator]
 const SZ = require('./load.js');
 const N = +(process.argv[2] || 300);
-const plain = (h) => String(h).replace(/<svg[\s\S]*?<\/svg>/g, '').replace(/<[^>]*>/g, '').replace(/\s+/g, ' ').trim();
+const plain = (h) => String(h).replace(/<svg[\s\S]*?<\/svg>/g, '').replace(/<span class="per">(\d+)<\/span>/g, '‾$1‾').replace(/<[^>]*>/g, '').replace(/\s+/g, ' ').trim();
 let errors = 0, warnings = 0, total = 0, gens = 0;
 const err = (m) => { errors++; if (errors < 60) console.log('FEHLER  ' + m); };
 const warn = (m) => { warnings++; if (warnings < 60) console.log('Hinweis ' + m); };

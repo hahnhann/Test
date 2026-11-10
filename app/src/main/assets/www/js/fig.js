@@ -72,6 +72,9 @@
       inner += '<path d="' + d + '" fill="none" stroke="' + col + '" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"' + (fn.dash ? ' stroke-dasharray="5 4"' : '') + '/>';
     });
     (o.segs || []).forEach(function (s) { inner += line(X(s[0]), Y(s[1]), X(s[2]), Y(s[3]), s[4] || TEAL, 2, s[5]); });
+    (o.curves || []).forEach(function (cv) {               // beliebige Kurven als Punktfolge
+      inner += '<path d="' + cv.pts.map(function (q, k) { return (k ? 'L' : 'M') + f1(X(q[0])) + ' ' + f1(Y(q[1])); }).join('') + '" fill="none" stroke="' + (cv.c || RED) + '" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>';
+    });
     b += '<g clip-path="url(#' + id + ')">' + inner + '</g>';
     (o.pts || []).forEach(function (p) {
       b += circle(X(p.x), Y(p.y), 4, p.c || RED, '#fff', 1);
