@@ -195,3 +195,8 @@ Schlüssel verwendet werden.
 
 Die Überschriften verwenden die Schrift „Cinzel“ (SIL Open Font License 1.1, siehe
 `app/src/main/assets/www/fonts/Cinzel-OFL.txt`).
+
+## Weitere Dokumentation
+
+- [`docs/ENTWICKLUNG.md`](docs/ENTWICKLUNG.md) – Entwicklungshergang, Rahmenbedingungen, Leitfaden für Weiterentwicklung und Anpassung (mit maschinenlesbarer JSON-Kurzfassung)
+- [`docs/ARCHITEKTUR-arc42.md`](docs/ARCHITEKTUR-arc42.md) – Architekturbeschreibung nach arc42
