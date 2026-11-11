@@ -22,6 +22,7 @@ SZ.MODS.forEach((m) => {
     const h = plain(SZ.T(t));
     if (/[\$^]|\{[^}]*\/[^}]*\}|undefined|\\/.test(h)) err(m.id + ': Formelsatz-Rest in Schriftrolle: ' + h.slice(0, 90));
     if ((String(t).match(/\$/g) || []).length % 2) err(m.id + ': ungerade Anzahl $ in: ' + String(t).slice(0, 60));
+    if (/&<i>/.test(SZ.T(t))) err(m.id + ': beschädigtes HTML-Zeichen in Schriftrolle: ' + String(t).slice(0, 60));
   });
   const n = (SZ.gen[m.id] || []).length;
   if (n === 0) err(m.id + ': keine Aufgaben-Generatoren');
@@ -47,6 +48,8 @@ Object.keys(SZ.gen).forEach((id) => {
       const all = [t.q, t.sol, t.hint].concat(t.opts || [], t.items || [], t.pre || [], t.unit || []).map(plain).join(' | ');
       if (/[\$^]|\{[^}]*\/[^}]*\}|undefined|NaN|Infinity|\[object|\\/.test(all)) { err(where + ': Formelsatz-Rest: ' + all.slice(0, 220)); break; }
       if (/,\d*?0{5,}\d|\d{2,}9{6,}/.test(all)) { err(where + ': Rundungsartefakt: ' + all.slice(0, 220)); break; }
+      if (/&<i>|&amp;[a-z]+;/.test([t.q, t.sol, t.hint].concat(t.opts || [], t.items || []).join(' '))) { err(where + ': beschädigtes HTML-Zeichen (z. B. &lt;) in: ' + plain(t.q).slice(0, 80)); break; }
+      if (/\b(vec|mat|binom|sqrt|cbrt|int)\(/.test(all)) { err(where + ': nicht umgesetzter Formelbaustein: ' + all.slice(0, 200)); break; }
       if (!t.sol) warn(where + ': kein Lösungsweg');
       types[t.type] = 1;
       seen.add(plain(t.q) + (t.fig || '').length + (t.opts || []).join('') + JSON.stringify(t.ans || ''));

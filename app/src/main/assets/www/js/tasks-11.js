@@ -19,7 +19,7 @@
     return NUM('Welchem Wert nähern sich die Funktionswerte von $f(x) = ' + q[0] + '$ für $x -> ∞$?', q[1], { sol: q[2] + ' Grenzwert: $' + q[1] + '$. Die Gerade $y = ' + q[1] + '$ ist waagerechte Asymptote.', hint: 'Setze in Gedanken sehr große Zahlen ein (Folgen, Klasse 10).' });
   });
   G('11-grenz', 2, function () {
-    var a = R.int(1, 6), b = R.int(2, 6), c = R.nz(-5, 5), d = R.nz(-5, 5), r = F(a, b);
+    var a = R.int(1, 6), b = R.intNot(2, 6, [a]), c = R.nz(-5, 5), d = R.nz(-5, 5), r = F(a, b);
     return NUM('Bestimme den Grenzwert: $lim_{x->∞} {' + a + 'x^2 ' + sg(c) + '/' + b + 'x^2 ' + sg(d) + '}$ (ganze Zahl oder Bruch)', r, { reduced: true, sol: 'Zähler und Nenner durch $x^2$ teilen: Die Reste ${' + c + '/x^2}$ und ${' + d + '/x^2}$ gehen gegen 0. Übrig bleibt ${' + a + '/' + b + '}' + (r.d !== b ? ' = ' + fs(r) : '') + '$.', hint: 'Bei gleichem Grad in Zähler und Nenner entscheiden die Faktoren vor der höchsten Potenz.' });
   });
   G('11-grenz', 2, function () {
@@ -133,7 +133,7 @@
 
   /* ---------- 11-integral ---------- */
   G('11-integral', 1, function () {
-    var n = R.int(1, 6);
+    var n = R.int(2, 6);
     return GAP('Bestimme eine Stammfunktion von $f(x) = x^{' + n + '}$: $F(x) = {x^{▢}/▢}$', [{ pre: 'Exponent:', ans: n + 1 }, { pre: 'Nenner:', ans: n + 1 }], { sol: 'Exponent um 1 erhöhen und durch den neuen Exponenten teilen: $F(x) = {x^{' + (n + 1) + '}/' + (n + 1) + '}$. Probe durch Ableiten.', hint: 'Umkehrung der Potenzregel: Der Exponent wird um 1 größer.' });
   });
   G('11-integral', 1, function () {

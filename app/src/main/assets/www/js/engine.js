@@ -199,7 +199,7 @@
     if (t.type === 'mc') return t.opts[t.correct];
     if (t.type === 'tf') return t.ans ? 'Wahr' : 'Falsch';
     if (t.type === 'num') {
-      return t.ans.map(function (a, i) { return (t.pre[i] ? t.pre[i] + ' ' : '') + SZ.showAns(a) + (t.unit[i] ? ' ' + t.unit[i] : ''); }).join(' &nbsp;·&nbsp; ');
+      return t.ans.map(function (a, i) { return (t.pre[i] ? t.pre[i] + ' ' : '') + SZ.showAns(a) + (t.unit[i] ? (t.unit[i] === '°' ? '' : ' ') + t.unit[i] : ''); }).join(' &nbsp;·&nbsp; ');
     }
     if (t.type === 'ord') return t.order.join(' → ');
     return '';

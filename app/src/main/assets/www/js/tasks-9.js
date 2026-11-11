@@ -65,7 +65,7 @@
 
   /* ---------- 9-wurzel ---------- */
   G('9-wurzel', 1, function () {
-    var q = R.pick([[8, 2], [27, 3], [64, 4], [125, 5], [1000, 10], [1, 1], [216, 6]]);
+    var q = R.pick([[8, 2], [27, 3], [64, 4], [125, 5], [1000, 10], [343, 7], [216, 6]]);
     return NUM('Berechne die dritte Wurzel: $cbrt(' + q[0] + ')$', q[1], { sol: '$' + q[1] + '^3 = ' + q[0] + '$, also $cbrt(' + q[0] + ') = ' + q[1] + '$.', hint: 'Welche Zahl ergibt dreimal mit sich selbst multipliziert ' + q[0] + '?' });
   });
   G('9-wurzel', 1, function () {
@@ -238,12 +238,13 @@
     return TF('Wahr oder falsch? ' + st[0], st[1], { sol: st[2] });
   });
   G('9-potfkt', 3, function () {
-    var q = R.pick([['x^4', '$y >= 0$'], ['x^3', 'alle reellen Zahlen'], ['{1/x^2}', '$y > 0$'], ['{1/x}', 'alle reellen Zahlen außer 0'], ['sqrt(x)', '$y >= 0$'], ['x^2 + 3', '$y >= 3$'], ['-x^2', '$y <= 0$']]);
-    return MC('Welchen Wertebereich hat $f(x) = ' + q[0] + '$?', q[1], ['$y >= 0$', 'alle reellen Zahlen', '$y > 0$', 'alle reellen Zahlen außer 0', '$y >= 3$', '$y <= 0$'], { sol: 'Überlege, welche Funktionswerte vorkommen können: ' + q[1] + '.', hint: 'Welche Höhen erreicht der Graph? Wird 0 erreicht?' });
+    var q = R.pick([['x^4', '$y >= 0$', 'Ein gerader Exponent macht jedes Ergebnis nichtnegativ; 0 wird bei $x = 0$ erreicht.'], ['x^3', 'alle reellen Zahlen', 'Ein ungerader Exponent erhält das Vorzeichen: Der Graph kommt von ganz unten und steigt nach ganz oben.'], ['{1/x^2}', '$y > 0$', 'Zähler und Nenner sind positiv, und ein Bruch mit dem Zähler 1 wird nie 0.'], ['{1/x}', 'alle reellen Zahlen außer 0', 'Der Kehrwert kann jede Zahl sein – nur nicht 0, denn ein Bruch mit dem Zähler 1 wird nie 0.'], ['sqrt(x)', '$y >= 0$', 'Eine Quadratwurzel ist nie negativ; 0 wird bei $x = 0$ erreicht.'], ['x^2 + 3', '$y >= 3$', '$x^2$ ist mindestens 0, also ist $x^2 + 3$ mindestens 3.'], ['-x^2', '$y <= 0$', '$x^2$ ist nie negativ, also ist $-x^2$ nie positiv.']]);
+    return MC('Welchen Wertebereich hat $f(x) = ' + q[0] + '$?', q[1], ['$y >= 0$', 'alle reellen Zahlen', '$y > 0$', 'alle reellen Zahlen außer 0', '$y >= 3$', '$y <= 0$'], { sol: q[2] + ' Wertebereich: ' + q[1] + '.', hint: 'Welche Höhen erreicht der Graph? Wird 0 erreicht?' });
   });
   G('9-potfkt', 3, function () {
     var a = R.pick([2, 3, 0.5, -1, -2]), n = R.pick([2, 3]), x = R.pick([-2, 2, 3]), v = a * Math.pow(x, n);
-    return NUM('Der Graph von $f(x) = x^' + n + '$ wird mit dem Faktor $' + de(a) + '$ in $y$-Richtung gestreckt: $g(x) = ' + M.co(a, 'x^' + n) + '$. Berechne $g(' + x + ')$.', v, { sol: '$g(' + x + ') = ' + M.num(a) + ' * ' + par(x) + '^' + n + ' = ' + M.num(a) + ' * ' + par(Math.pow(x, n)) + ' = ' + de(v) + '$. Jeder Funktionswert wird mit $' + de(a) + '$ multipliziert.', hint: 'Erst potenzieren, dann mit dem Faktor multiplizieren.' });
+    var wie = a > 1 ? 'mit dem Faktor $' + de(a) + '$ in $y$-Richtung gestreckt' : a > 0 ? 'mit dem Faktor $' + de(a) + '$ in $y$-Richtung gestaucht' : a === -1 ? 'an der $x$-Achse gespiegelt' : 'mit dem Faktor $' + de(-a) + '$ in $y$-Richtung gestreckt und an der $x$-Achse gespiegelt';
+    return NUM('Der Graph von $f(x) = x^' + n + '$ wird ' + wie + ': $g(x) = ' + M.co(a, 'x^' + n) + '$. Berechne $g(' + x + ')$.', v, { sol: '$g(' + x + ') = ' + M.num(a) + ' * ' + par(x) + '^' + n + ' = ' + M.num(a) + ' * ' + par(Math.pow(x, n)) + ' = ' + de(v) + '$. Jeder Funktionswert wird mit $' + par(a) + '$ multipliziert.', hint: 'Erst potenzieren, dann mit dem Faktor multiplizieren.' });
   });
 
   /* ---------- 9-kreis ---------- */
@@ -349,7 +350,7 @@
   });
   G('9-trigo', 1, function () {
     var q = R.pick([['sin 30°', 0.5], ['cos 60°', 0.5], ['tan 45°', 1], ['sin 90°', 1], ['cos 0°', 1], ['cos 90°', 0], ['sin 0°', 0]]);
-    return NUM('Welchen Wert hat $' + q[0] + '$?', q[1], { sol: 'Ein besonderer Wert, den man auswendig kennen sollte: $' + q[0] + ' = ' + de(q[1]) + '$. Er ergibt sich aus dem halben gleichseitigen Dreieck (30° und 60°) bzw. dem halben Quadrat (45°).', hint: 'Denke an das halbe gleichseitige Dreieck mit den Winkeln 30°, 60° und 90°.' });
+    return NUM('Welchen Wert hat $' + q[0] + '$?', q[1], { sol: 'Ein besonderer Wert, den man auswendig kennen sollte: $' + q[0] + ' = ' + de(q[1]) + '$. ' + (/ (0|90)°/.test(q[0]) ? 'Stell dir vor, der Winkel schrumpft auf 0°: Die Gegenkathete verschwindet, die Ankathete wird so lang wie die Hypotenuse. Bei 90° ist es umgekehrt.' : 'Er ergibt sich aus dem halben gleichseitigen Dreieck (30° und 60°) bzw. dem halben Quadrat (45°).'), hint: / (0|90)°/.test(q[0]) ? 'Was passiert mit Gegenkathete und Ankathete, wenn der Winkel ganz klein oder fast 90° wird?' : 'Denke an das halbe gleichseitige Dreieck (30°, 60°, 90°) oder an das halbe Quadrat (45°).' });
   });
   G('9-trigo', 2, function () {
     var c = 2 * R.int(2, 12), v = R.int(0, 2);
@@ -370,7 +371,7 @@
   });
   G('9-trigo', 2, function () {
     var d = R.pick([20, 30, 40, 50, 60]), q = R.pick([[45, 1], [31, 0.6], [27, 0.5], [39, 0.8]]);
-    return NUM('Vom Boden aus sieht man die Spitze eines Kirchturms unter einem Winkel von ' + q[0] + '°. Der Turm ist ' + d + ' m entfernt. Wie hoch ist er? (Verwende $tan ' + q[0] + '° ≈ ' + de(q[1]) + '$.)', d * q[1], { unit: 'm', tol: 0.05, sol: 'Höhe = Gegenkathete, Entfernung = Ankathete: $h = ' + d + ' * tan ' + q[0] + '° ≈ ' + d + ' * ' + de(q[1]) + ' = ' + de(d * q[1]) + '$ m.', hint: '$tan α = {Gegenkathete/Ankathete}$' });
+    return NUM('Vom Boden aus sieht man die Spitze eines Kirchturms unter einem Winkel von ' + q[0] + '°. Der Turm ist ' + d + ' m entfernt. Wie hoch ist er? (Verwende $tan ' + q[0] + '° ' + (q[0] === 45 ? '=' : '≈') + ' ' + de(q[1]) + '$.)', d * q[1], { unit: 'm', tol: 0.05, sol: 'Höhe = Gegenkathete, Entfernung = Ankathete: $h = ' + d + ' * tan ' + q[0] + '° ' + (q[0] === 45 ? '=' : '≈') + ' ' + d + ' * ' + de(q[1]) + ' = ' + de(d * q[1]) + '$ m.', hint: '$tan α = {Gegenkathete/Ankathete}$' });
   });
   G('9-trigo', 2, function () {
     var a = R.pick([10, 20, 25, 35, 40, 55, 70, 80]);
@@ -430,7 +431,7 @@
   });
   G('9-statistik', 3, function () {
     var m = R.int(4, 9), devs = R.pick([[-2, -1, 0, 1, 2], [-3, -1, 0, 1, 3], [-2, -2, 0, 2, 2], [-1, -1, 0, 0, 2], [-4, -1, 0, 2, 3], [-3, 0, 0, 1, 2]]), a = R.shuffle(devs.map(function (d) { return m + d; })), ss = devs.reduce(function (x, d) { return x + d * d; }, 0);
-    return NUM('Berechne die Varianz der Daten: ' + a.join('; ') + ' (Mittelwert der quadrierten Abweichungen vom arithmetischen Mittel)', ss / 5, { sol: 'Arithmetisches Mittel: ' + m + '. Abweichungen: ' + sorted(devs).join('; ') + '. Quadrate: ' + sorted(devs).map(function (d) { return d * d; }).join(' + ') + ' = ' + ss + '. Varianz: $' + ss + ' : 5 = ' + de(ss / 5) + '$', hint: 'Schritte: Mittelwert – Abweichungen – quadrieren – Mittelwert der Quadrate.' });
+    return NUM('Berechne die Varianz der Daten: ' + a.join('; ') + ' (Mittelwert der quadrierten Abweichungen vom arithmetischen Mittel)', ss / 5, { sol: 'Arithmetisches Mittel: ' + m + '. Abweichungen: ' + sorted(devs).map(function (d) { return '$' + d + '$'; }).join('; ') + '. Quadrate: ' + sorted(devs).map(function (d) { return d * d; }).join(' + ') + ' = ' + ss + '. Varianz: $' + ss + ' : 5 = ' + de(ss / 5) + '$', hint: 'Schritte: Mittelwert – Abweichungen – quadrieren – Mittelwert der Quadrate.' });
   });
   G('9-statistik', 3, function () {
     var m = R.int(5, 12), d = R.int(1, 4), a = R.shuffle([m - d, m - d, m + d, m + d]);

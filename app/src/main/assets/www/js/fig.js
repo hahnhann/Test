@@ -87,7 +87,9 @@
 
   /* ---------- Vieleck mit Beschriftung (Dreiecke, Rechtecke, Trapeze ...) ---------- */
   Fig.shape = function (o) {
-    var P = o.P, W = o.w || 250, pad = o.pad || 34, i;
+    var P = o.P, W = o.w || 250, i, longest = 0;
+    (o.s || []).forEach(function (l) { longest = Math.max(longest, String(l || '').length); });
+    var pad = o.pad || Math.max(34, 24 + longest * 4);        // Platz für Beschriftungen am Rand
     var xs = P.map(function (p) { return p[0]; }), ys = P.map(function (p) { return p[1]; });
     (o.extra || []).forEach(function (e) { xs.push(e.from[0], e.to[0]); ys.push(e.from[1], e.to[1]); });
     var minx = Math.min.apply(null, xs), maxx = Math.max.apply(null, xs), miny = Math.min.apply(null, ys), maxy = Math.max.apply(null, ys);
@@ -369,21 +371,16 @@
   /* ---------- Urne mit Kugeln: [['rot', 3], ['blau', 2]] ---------- */
   Fig.BALL = { rot: '#c0392b', blau: '#2b6cb0', 'grün': '#2f855a', gelb: '#d69e2e', 'weiß': '#fdfdfd', schwarz: '#333344', violett: '#6b46c1' };
   Fig.urn = function (list) {
-    var balls = [];
-    list.forEach(function (e) { for (var i = 0; i < e[1]; i++) balls.push(Fig.BALL[e[0]] || '#888'); });
-    var order = [], k;                                  // gleichmäßig durchmischen (ohne Zufall)
-    for (k = 0; k < balls.length; k++) order.push(balls[(k * 7) % balls.length === k ? k : (k * 5 + 3) % balls.length]);
-    var per = Math.min(6, Math.max(3, Math.ceil(Math.sqrt(balls.length * 1.6)))), rows = Math.ceil(balls.length / per);
-    var W = 200, r = 11, Hh = 46 + rows * 24, s = '';
-    s += '<path d="M40 14 h120 M48 14 q-22 ' + (Hh - 30) + ' 30 ' + (Hh - 22) + ' h44 q52 -8 30 -' + (Hh - 22) + '" fill="rgba(43,35,80,.06)" stroke="' + INK + '" stroke-width="2" stroke-linecap="round"/>';
-    var sorted = balls.slice();                        // Farben abwechselnd anordnen
-    var mix = [], groups = list.map(function (e) { return { c: Fig.BALL[e[0]] || '#888', n: e[1] }; });
-    var left = balls.length;
-    while (left > 0) { groups.forEach(function (gr) { if (gr.n > 0) { mix.push(gr.c); gr.n--; left--; } }); }
+    var total = 0, mix = [], groups = list.map(function (e) { total += e[1]; return { c: Fig.BALL[e[0]] || '#888', n: e[1] }; });
+    var left = total;
+    while (left > 0) { groups.forEach(function (gr) { if (gr.n > 0) { mix.push(gr.c); gr.n--; left--; } }); }   // Farben abwechselnd
+    var per = Math.min(6, Math.max(3, Math.ceil(Math.sqrt(total * 1.6)))), rows = Math.ceil(total / per);
+    var inner = per * 24 + 10, W = inner + 36, Hh = rows * 23 + 44, x0 = 18, x1 = x0 + inner, top = 12, bot = Hh - 8, s = '';
+    s += '<path d="M' + x0 + ' ' + top + ' L' + x0 + ' ' + (bot - 14) + ' Q' + x0 + ' ' + bot + ' ' + (x0 + 14) + ' ' + bot + ' L' + (x1 - 14) + ' ' + bot + ' Q' + x1 + ' ' + bot + ' ' + x1 + ' ' + (bot - 14) + ' L' + x1 + ' ' + top + '" fill="rgba(43,35,80,.07)" stroke="' + INK + '" stroke-width="2" stroke-linejoin="round"/>';
+    s += line(x0 - 8, top, x1 + 8, top, INK, 2.4);
     mix.forEach(function (col, i) {
-      var row = Math.floor(i / per), inRow = Math.min(per, mix.length - row * per), j = i % per;
-      var x = W / 2 + (j - (inRow - 1) / 2) * 24, y = Hh - 22 - row * 23;
-      s += circle(x, y, r, col, INK, 1.2);
+      var row = Math.floor(i / per), inRow = Math.min(per, total - row * per), j = i % per;
+      s += circle(W / 2 + (j - (inRow - 1) / 2) * 24, bot - 15 - row * 23, 10.5, col, INK, 1.2);
     });
     return svg(W, Hh, s);
   };

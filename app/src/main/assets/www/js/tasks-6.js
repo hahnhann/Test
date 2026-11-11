@@ -325,7 +325,7 @@
   G('6-viereck', 1, function () {
     var gg = R.int(4, 12), h = R.int(3, 10);
     if (gg * h % 2) gg++;
-    return NUM('Berechne den Flächeninhalt des Dreiecks.', gg * h / 2, { unit: '$cm^2$', fig: Fig.shape({ P: [[0, 0], [gg, 0], [gg * 0.35, h]], s: ['g = ' + gg + ' cm', '', ''], extra: [{ from: [gg * 0.35, 0], to: [gg * 0.35, h], dash: true, l: 'h = ' + h + ' cm', dx: 34 }], maxh: 120 }), sol: '$A = {g * h/2} = {' + gg + ' * ' + h + '/2} = ' + gg * h / 2 + '$, also $' + gg * h / 2 + ' cm^2$.', hint: 'Dreieck: Grundseite mal Höhe, geteilt durch 2.' });
+    return NUM('Berechne den Flächeninhalt des Dreiecks mit der Grundseite $g = ' + gg + '$ cm und der Höhe $h = ' + h + '$ cm.', gg * h / 2, { unit: '$cm^2$', fig: Fig.shape({ P: [[0, 0], [gg, 0], [gg * 0.35, h]], s: ['g', '', ''], extra: [{ from: [gg * 0.35, 0], to: [gg * 0.35, h], dash: true, l: 'h', dx: 9, it: true }], maxh: 120 }), sol: '$A = {g * h/2} = {' + gg + ' * ' + h + '/2} = ' + gg * h / 2 + '$, also $' + gg * h / 2 + ' cm^2$.', hint: 'Dreieck: Grundseite mal Höhe, geteilt durch 2.' });
   });
   G('6-viereck', 1, function () {
     var gg = R.int(4, 12), h = R.int(3, 9), sh = R.int(1, 3);
@@ -335,7 +335,7 @@
     var a = R.int(6, 12), c = R.int(2, a - 2), h = R.int(2, 8);
     if ((a + c) * h % 2) h++;
     var off = (a - c) / 2;
-    return NUM('Berechne den Flächeninhalt des Trapezes.', (a + c) * h / 2, { unit: '$cm^2$', fig: Fig.shape({ P: [[0, 0], [a, 0], [a - off, h], [off, h]], s: ['a = ' + a + ' cm', '', 'c = ' + c + ' cm', ''], extra: [{ from: [off, 0], to: [off, h], dash: true, l: 'h = ' + h + ' cm', dx: 34 }], maxh: 110 }), sol: '$A = {(a + c) * h/2} = {(' + a + ' + ' + c + ') * ' + h + '/2} = ' + (a + c) * h / 2 + '$, also $' + (a + c) * h / 2 + ' cm^2$.', hint: 'Trapez: Summe der parallelen Seiten mal Höhe, geteilt durch 2.' });
+    return NUM('Berechne den Flächeninhalt des Trapezes mit den parallelen Seiten $a = ' + a + '$ cm und $c = ' + c + '$ cm und der Höhe $h = ' + h + '$ cm.', (a + c) * h / 2, { unit: '$cm^2$', fig: Fig.shape({ P: [[0, 0], [a, 0], [a - off, h], [off, h]], s: ['a', '', 'c', ''], extra: [{ from: [off, 0], to: [off, h], dash: true, l: 'h', dx: 9, it: true }], maxh: 110 }), sol: '$A = {(a + c) * h/2} = {(' + a + ' + ' + c + ') * ' + h + '/2} = ' + (a + c) * h / 2 + '$, also $' + (a + c) * h / 2 + ' cm^2$.', hint: 'Trapez: Summe der parallelen Seiten mal Höhe, geteilt durch 2.' });
   });
   G('6-viereck', 1, function () {
     var q = R.pick([['vier rechte Winkel hat, aber nicht unbedingt vier gleich lange Seiten', 'Rechteck'], ['vier gleich lange Seiten hat, aber nicht unbedingt rechte Winkel', 'Raute'], ['genau ein Paar paralleler Seiten hat', 'Trapez'], ['zwei Paare paralleler Seiten hat, aber weder gleich lange Seiten noch rechte Winkel haben muss', 'Parallelogramm'], ['vier gleich lange Seiten und vier rechte Winkel hat', 'Quadrat'], ['zwei Paare gleich langer benachbarter Seiten hat', 'Drachenviereck']]);

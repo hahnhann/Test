@@ -150,32 +150,37 @@
     return -1;
   }
   var UPRIGHT = { cm: 1, mm: 1, dm: 1, km: 1, kg: 1, mg: 1, ml: 1, 'in': 1, zu: 1, je: 1, um: 1, im: 1, an: 1, es: 1 };
+  function splitTop(str, sep) {                   // an Trennzeichen teilen, aber nicht innerhalb von Klammern
+    var out = [], depth = 0, cur = '';
+    for (var k = 0; k < str.length; k++) {
+      var ch = str.charAt(k);
+      if (ch === '(') depth++;
+      else if (ch === ')') depth--;
+      if (ch === sep && depth === 0) { out.push(cur); cur = ''; } else cur += ch;
+    }
+    out.push(cur);
+    return out;
+  }
   H.m = function (s) {
     var store = [];
     function keep(html) { store.push(html); return '\uE000' + (store.length - 1) + '\uE001'; }
+    function cell(c) { return '<span>' + conv(String(c).trim()) + '</span>'; }
     function conv(x) {
       var i, j, prev;
-      // Wurzeln: sqrt(...) und cbrt(...)
-      while ((i = x.search(/(sqrt|cbrt)\(/)) >= 0) {
-        var cube = x.substr(i, 4) === 'cbrt';
-        j = findClose(x, i + 4);
+      // Bausteine mit Klammern: sqrt(...), cbrt(...), vec(1;2;3), mat(1,2;3,4), binom(n,k), int(a,b)
+      var re = /\b(sqrt|cbrt|vec|mat|binom|int)\(/, mm, name, open, inner, html, parts;
+      while ((mm = re.exec(x))) {
+        i = mm.index; name = mm[1]; open = i + name.length;
+        j = findClose(x, open);
         if (j < 0) break;
-        x = x.slice(0, i) + keep(H.sq(conv(x.slice(i + 5, j)), cube ? 3 : 0)) + x.slice(j + 1);
+        inner = x.slice(open + 1, j);
+        if (name === 'sqrt' || name === 'cbrt') html = H.sq(conv(inner), name === 'cbrt' ? 3 : 0);
+        else if (name === 'vec') html = '<span class="vecc">' + splitTop(inner, ';').map(cell).join('') + '</span>';
+        else if (name === 'mat') html = '<span class="mat">' + splitTop(inner, ';').map(function (row) { return '<span class="mr">' + splitTop(row, ',').map(cell).join('') + '</span>'; }).join('') + '</span>';
+        else if (name === 'binom') { parts = splitTop(inner, ','); html = '<span class="vecc">' + cell(parts[0]) + cell(parts[1] || '') + '</span>'; }
+        else { parts = splitTop(inner, ','); html = '<span class="intg">∫<span class="lim">' + cell(parts[1] || '') + cell(parts[0]) + '</span></span>'; }
+        x = x.slice(0, i) + keep(html) + x.slice(j + 1);
       }
-      // Spaltenvektor vec(1;2;3), Binomialkoeffizient binom(n,k), Integral int(a,b)
-      x = x.replace(/vec\(([^()]+)\)/g, function (_, a) {
-        return keep('<span class="vecc">' + a.split(';').map(function (c) { return '<span>' + conv(c.trim()) + '</span>'; }).join('') + '</span>');
-      });
-      // Matrix mat(1,2;3,4): Zeilen durch Semikolon, Einträge durch Komma getrennt
-      x = x.replace(/mat\(([^()]+)\)/g, function (_, a) {
-        return keep('<span class="mat">' + a.split(';').map(function (row) { return '<span class="mr">' + row.split(',').map(function (c) { return '<span>' + conv(c.trim()) + '</span>'; }).join('') + '</span>'; }).join('') + '</span>');
-      });
-      x = x.replace(/binom\(([^,()]+),([^()]+)\)/g, function (_, a, b) {
-        return keep('<span class="vecc"><span>' + conv(a.trim()) + '</span><span>' + conv(b.trim()) + '</span></span>');
-      });
-      x = x.replace(/int\(([^,()]*),([^()]*)\)/g, function (_, a, b) {
-        return keep('<span class="intg">∫<span class="lim"><span>' + conv(b.trim()) + '</span><span>' + conv(a.trim()) + '</span></span></span>');
-      });
       // Periode: 0,[3] -> 0,3 mit Überstrich
       x = x.replace(/\[(\d+)\]/g, function (_, d) { return keep('<span class="per">' + d + '</span>'); });
       // Hoch- und Tiefstellung (vor den Brüchen, damit {x^{n+1}/2} funktioniert)
@@ -195,7 +200,7 @@
       // Zeichen
       x = x.replace(/<=/g, '≤').replace(/>=/g, '≥').replace(/!=/g, '≠').replace(/->/g, '→')
         .replace(/\+-/g, '±').replace(/\*/g, '·').replace(/-/g, '−').replace(/\.\.\./g, '…')
-        .replace(/</g, '&lt;').replace(/>/g, '&gt;');
+        .replace(/</g, function () { return keep('&lt;'); }).replace(/>/g, function () { return keep('&gt;'); });
       // Funktionsnamen aufrecht, einzelne Buchstaben kursiv
       x = x.replace(/\b(sin|cos|tan|ln|lg|log|lim|ggT|kgV|pi|dx)\b/g, function (w) { return keep(w === 'pi' ? 'π' : (w === 'dx' ? ' d<i>x</i>' : w)); });
       // Produkte wie ab, xy oder Punkte wie AB, ABC: jeder Buchstabe kursiv – Einheiten und kurze Wörter bleiben aufrecht

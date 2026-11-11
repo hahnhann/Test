@@ -341,8 +341,8 @@
     return MCF('Welche Art von Folge ist das? $' + s.join('; ') + '; ...$', ['arithmetisch (konstante Differenz)', 'geometrisch (konstanter Quotient)', 'keines von beiden'], v, { sol: v === 0 ? 'Die Differenz ist immer ' + (s[1] - s[0]) + '.' : v === 1 ? 'Der Quotient ist immer ' + s[1] / s[0] + '.' : 'Die Differenzen ' + (s[1] - s[0]) + ', ' + (s[2] - s[1]) + ', ' + (s[3] - s[2]) + ' sind verschieden, die Quotienten auch.', hint: 'Prüfe Differenzen und Quotienten.' });
   });
   G('10-folgen', 2, function () {
-    var q = R.pick([['{2n + 1/n}', 2, 'Umformen: $a_n = 2 + {1/n}$.'], ['{3n - 1/n + 2}', 3, 'Zähler und Nenner durch $n$ teilen: ${3 - {1/n}/1 + {2/n}}$.'], ['{5/n}', 0, 'Der Nenner wächst über alle Grenzen, der Zähler bleibt 5.'], ['({1/2})^n', 0, 'Jedes Glied ist halb so groß wie das vorige.'], ['4 - {1/n}', 4, 'Von 4 wird immer weniger abgezogen.'], ['{n/2n + 1}', 0.5, 'Zähler und Nenner durch $n$ teilen: ${1/2 + {1/n}}$.'], ['{6n^2/2n^2 + 1}', 3, 'Zähler und Nenner durch $n^2$ teilen: ${6/2 + {1/n^2}}$.']]);
-    return NUM('Welchen Grenzwert hat die Folge $a_n = ' + q[0] + '$ für immer größere $n$?', q[1], { sol: q[2] + ' Da ${1/n}$ gegen 0 geht, ist der Grenzwert $' + de(q[1]) + '$.', hint: 'Was passiert mit ${1/n}$, wenn $n$ riesig wird?' });
+    var q = R.pick([['{2n + 1/n}', 2, 'Umformen: $a_n = 2 + {1/n}$.'], ['{3n - 1/n + 2}', 3, 'Zähler und Nenner durch $n$ teilen: ${3 - {1/n}/1 + {2/n}}$.'], ['{5/n}', 0, 'Der Nenner wächst über alle Grenzen, der Zähler bleibt 5.', 'Die Glieder werden beliebig klein:'], ['({1/2})^n', 0, 'Jedes Glied ist halb so groß wie das vorige: ${1/2}$; ${1/4}$; ${1/8}$; …', 'Die Glieder werden beliebig klein:'], ['4 - {1/n}', 4, 'Von 4 wird immer weniger abgezogen.'], ['{n/2n + 1}', 0.5, 'Zähler und Nenner durch $n$ teilen: ${1/2 + {1/n}}$.'], ['{6n^2/2n^2 + 1}', 3, 'Zähler und Nenner durch $n^2$ teilen: ${6/2 + {1/n^2}}$.']]);
+    return NUM('Welchen Grenzwert hat die Folge $a_n = ' + q[0] + '$ für immer größere $n$?', q[1], { sol: q[2] + ' ' + (q[3] || 'Da ${1/n}$ gegen 0 geht, ist') + (q[3] ? ' Der Grenzwert ist $' : ' der Grenzwert $') + de(q[1]) + '$.', hint: q[3] ? 'Berechne einige Glieder. Welcher Zahl kommen sie immer näher?' : 'Was passiert mit ${1/n}$, wenn $n$ riesig wird?' });
   });
   G('10-folgen', 2, function () {
     var d = R.int(2, 5), b = R.nz(-3, 5), s = [1, 2, 3, 4].map(function (n) { return d * n + b; });
@@ -389,6 +389,7 @@
   });
   G('10-zins', 3, function () {
     var s = R.pick([1000, 2000, 5000]), p = R.pick([4, 5, 10]), r = R.pick([300, 500, 600]), rest = s * (1 + p / 100) - r;
+    if (r - s * p / 100 < 50) return null;       // die Rate soll die Zinsen deutlich übersteigen
     return NUM('Ein Kredit über ' + de(s) + ' € wird mit ' + p + ' % pro Jahr verzinst. Am Jahresende werden ' + r + ' € zurückgezahlt. Wie hoch ist die Restschuld danach?', rest, { unit: '€', sol: 'Schuld plus Zinsen: $' + s + ' * ' + de(1 + p / 100) + ' = ' + de(s * (1 + p / 100)) + '$. Minus Rate: $' + de(s * (1 + p / 100)) + ' - ' + r + ' = ' + de(rest) + '$ €. Von der Rate tilgen nur $' + de(r - s * p / 100) + '$ € die Schuld – der Rest sind Zinsen.', hint: 'Erst kommen die Zinsen dazu, dann wird die Rate abgezogen.' });
   });
   G('10-zins', 3, function () {
