@@ -7,17 +7,17 @@
   /* Die sechs Bauteile des Gebäudes der Mathematik.
      "uni" nennt das Fachgebiet, wie es an einer Universität heißt. */
   SZ.TOWERS = [
-    { id: 'log', name: 'Fundament', sub: 'Logik & Beweisen', uni: 'Logik und Grundlagen', color: '#9db7e0', prof: 'Rabe Quod',
+    { id: 'log', short: 'Fundament', name: 'Fundament', sub: 'Logik & Beweisen', uni: 'Logik und Grundlagen', color: '#9db7e0', prof: 'Rabe Quod',
       about: 'Hier lagern die Grundsteine: Mengen, Aussagen, Beweise und kluge Strategien. Ohne Fundament steht kein Turm.' },
-    { id: 'zahl', name: 'Zahlenturm', sub: 'Zahlen & Rechnen', uni: 'Arithmetik und Zahlentheorie', color: '#f2b84b', prof: 'Meisterin Primula Siebenstern',
+    { id: 'zahl', short: 'Zahlen', name: 'Zahlenturm', sub: 'Zahlen & Rechnen', uni: 'Arithmetik und Zahlentheorie', color: '#f2b84b', prof: 'Meisterin Primula Siebenstern',
       about: 'Von den natürlichen Zahlen über Brüche und negative Zahlen bis zu den reellen Zahlen: Jeder Stock erweitert den Zahlbereich.' },
-    { id: 'alg', name: 'Algebra-Turm', sub: 'Terme & Gleichungen', uni: 'Algebra', color: '#ef7d8f', prof: 'Magistra Xenia von Gleichen',
+    { id: 'alg', short: 'Algebra', name: 'Algebra-Turm', sub: 'Terme & Gleichungen', uni: 'Algebra', color: '#ef7d8f', prof: 'Magistra Xenia von Gleichen',
       about: 'Hier lernen Buchstaben das Rechnen. Aus Rechengesetzen werden Terme, aus Termen Gleichungen, aus Gleichungen Systeme.' },
-    { id: 'fun', name: 'Funktionen-Turm', sub: 'Zuordnungen & Graphen', uni: 'Analysis', color: '#4fd1c5', prof: 'Meister Graphius Bogenreich',
+    { id: 'fun', short: 'Funktionen', name: 'Funktionen-Turm', sub: 'Zuordnungen & Graphen', uni: 'Analysis', color: '#4fd1c5', prof: 'Meister Graphius Bogenreich',
       about: 'Wie hängt eine Größe von einer anderen ab? Vom Koordinatensystem führt der Weg bis zu Ableitung und Integral.' },
-    { id: 'geo', name: 'Geometrie-Turm', sub: 'Figuren & Körper', uni: 'Geometrie', color: '#7bd88f', prof: 'Meisterin Euklidia Zirkelstein',
+    { id: 'geo', short: 'Geometrie', name: 'Geometrie-Turm', sub: 'Figuren & Körper', uni: 'Geometrie', color: '#7bd88f', prof: 'Meisterin Euklidia Zirkelstein',
       about: 'Winkel, Dreiecke, Kreise und Körper – und die berühmten Sätze von Thales und Pythagoras.' },
-    { id: 'sto', name: 'Turm des Zufalls', sub: 'Daten & Wahrscheinlichkeit', uni: 'Stochastik', color: '#b794f4', prof: 'Madame Fortuna Würfelglanz',
+    { id: 'sto', short: 'Zufall', name: 'Turm des Zufalls', sub: 'Daten & Wahrscheinlichkeit', uni: 'Stochastik', color: '#b794f4', prof: 'Madame Fortuna Würfelglanz',
       about: 'Daten ordnen, Chancen berechnen, den Zufall zähmen: von Häufigkeiten bis zur Binomialverteilung.' }
   ];
   SZ.tower = function (id) { return SZ.TOWERS.filter(function (t) { return t.id === id; })[0]; };

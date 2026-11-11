@@ -37,7 +37,8 @@
     var id = 'cl' + (++uid), b = '', i;
     var gx = o.gx || 1, gy = o.gy || 1;
     b += '<clipPath id="' + id + '"><rect x="' + (pad - 1) + '" y="' + (pad - 1) + '" width="' + (W - 2 * pad + 2) + '" height="' + (Hh - 2 * pad + 2) + '"/></clipPath>';
-    for (i = Math.ceil(x0 / gx) * gx; i <= x1 + 1e-9; i += gx) b += line(X(i), pad, X(i), Hh - pad, GRID, 1);
+    if (o.xticks) o.xticks.forEach(function (t) { b += line(X(t.x), pad, X(t.x), Hh - pad, GRID, 1); });
+    else for (i = Math.ceil(x0 / gx) * gx; i <= x1 + 1e-9; i += gx) b += line(X(i), pad, X(i), Hh - pad, GRID, 1);
     for (i = Math.ceil(y0 / gy) * gy; i <= y1 + 1e-9; i += gy) b += line(pad, Y(i), W - pad, Y(i), GRID, 1);
     var ax = Math.min(Math.max(0, x0), x1), ay = Math.min(Math.max(0, y0), y1);
     // Achsen mit Pfeilspitzen
@@ -47,7 +48,8 @@
     b += text(X(ax) + 11, pad - 4, o.yl || 'y', { it: !o.yl, size: 12 });
     var tx = o.tx || (x1 - x0 > 12 ? 2 : 1) * gx, ty = o.ty || (y1 - y0 > 12 ? 2 : 1) * gy;
     if (o.ticks !== false) {
-      for (i = Math.ceil(x0 / tx) * tx; i <= x1 - 0.5 * gx; i += tx) {
+      if (o.xticks) o.xticks.forEach(function (t) { if (t.l) b += line(X(t.x), Y(ay) - 3, X(t.x), Y(ay) + 3, INK, 1.2) + text(X(t.x), Y(ay) + 11, t.l, { size: 9.5 }); });
+      else for (i = Math.ceil(x0 / tx) * tx; i <= x1 - 0.5 * gx; i += tx) {
         if (Math.abs(i) < 1e-9) continue;
         b += line(X(i), Y(ay) - 3, X(i), Y(ay) + 3, INK, 1.2) + text(X(i), Y(ay) + 11, M.de(i), { size: 9.5 });
       }

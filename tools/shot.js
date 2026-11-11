@@ -1,0 +1,40 @@
+// Öffnet das Spiel im mitgelieferten Chromium und macht Bildschirmfotos (für Tests während der Entwicklung).
+// Aufruf: node tools/shot.js
+const { chromium } = require('playwright');
+const path = require('path');
+(async () => {
+  const browser = await chromium.launch();
+  const ctx = await browser.newContext({ viewport: { width: 390, height: 800 }, deviceScaleFactor: 2 });
+  const page = await ctx.newPage();
+  const errors = [];
+  page.on('pageerror', (e) => errors.push('pageerror: ' + e.message));
+  page.on('console', (m) => { if (m.type() === 'error') errors.push('console: ' + m.text()); });
+  const url = 'file://' + path.join(__dirname, '..', 'app', 'src', 'main', 'assets', 'www', 'index.html');
+  const out = (n) => path.join(__dirname, 'shots', n + '.png');
+  await page.goto(url);
+  await page.waitForTimeout(400);
+  await page.screenshot({ path: out('01-intro') });
+  await page.click('[data-act=introNext]');
+  await page.fill('#nm', 'Mira');
+  await page.click('[data-act=introNext]');
+  await page.click('[data-act=pickZirkel][data-id=rosette]');
+  await page.screenshot({ path: out('02-zirkel') });
+  await page.click('[data-act=introNext]');
+  await page.screenshot({ path: out('03-klasse') });
+  await page.click('[data-act=introNext]');
+  await page.click('[data-act=introNext]');
+  await page.waitForTimeout(500);
+  await page.screenshot({ path: out('04-schloss') });
+  await page.screenshot({ path: out('05-schloss-voll'), fullPage: true });
+  await page.click('[data-act=mod][data-id="8-binom"]');
+  await page.waitForTimeout(350);
+  await page.screenshot({ path: out('06-modul') });
+  await page.click('[data-act=lesson]');
+  await page.waitForTimeout(300);
+  await page.screenshot({ path: out('07-schriftrolle'), fullPage: true });
+  await page.click('[data-act=quest][data-mode=ueben]');
+  await page.waitForTimeout(300);
+  await page.screenshot({ path: out('08-aufgabe') });
+  console.log(errors.length ? errors.join('\n') : 'keine Fehler in der Konsole');
+  await browser.close();
+})();

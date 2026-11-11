@@ -149,9 +149,10 @@
     }
     return -1;
   }
+  var UPRIGHT = { cm: 1, mm: 1, dm: 1, km: 1, kg: 1, mg: 1, ml: 1, 'in': 1, zu: 1, je: 1, um: 1, im: 1, an: 1, es: 1 };
   H.m = function (s) {
     var store = [];
-    function keep(html) { store.push(html); return '' + (store.length - 1) + ''; }
+    function keep(html) { store.push(html); return '\uE000' + (store.length - 1) + '\uE001'; }
     function conv(x) {
       var i, j, prev;
       // Wurzeln: sqrt(...) und cbrt(...)
@@ -165,6 +166,10 @@
       x = x.replace(/vec\(([^()]+)\)/g, function (_, a) {
         return keep('<span class="vecc">' + a.split(';').map(function (c) { return '<span>' + conv(c.trim()) + '</span>'; }).join('') + '</span>');
       });
+      // Matrix mat(1,2;3,4): Zeilen durch Semikolon, Einträge durch Komma getrennt
+      x = x.replace(/mat\(([^()]+)\)/g, function (_, a) {
+        return keep('<span class="mat">' + a.split(';').map(function (row) { return '<span class="mr">' + row.split(',').map(function (c) { return '<span>' + conv(c.trim()) + '</span>'; }).join('') + '</span>'; }).join('') + '</span>');
+      });
       x = x.replace(/binom\(([^,()]+),([^()]+)\)/g, function (_, a, b) {
         return keep('<span class="vecc"><span>' + conv(a.trim()) + '</span><span>' + conv(b.trim()) + '</span></span>');
       });
@@ -174,11 +179,11 @@
       // Periode: 0,[3] -> 0,3 mit Überstrich
       x = x.replace(/\[(\d+)\]/g, function (_, d) { return keep('<span class="per">' + d + '</span>'); });
       // Hoch- und Tiefstellung (vor den Brüchen, damit {x^{n+1}/2} funktioniert)
-      x = x.replace(/\^(\{[^{}]*\}|-?[A-Za-z0-9]+)/g, function (_, e) {
+      x = x.replace(/\^(\{[^{}]*\}|-?(?:\d+|[A-Za-z]))/g, function (_, e) {
         if (e.charAt(0) === '{') e = e.slice(1, -1);
         return keep('<sup>' + conv(e) + '</sup>');
       });
-      x = x.replace(/_(\{[^{}]*\}|[A-Za-z0-9]+)/g, function (_, e) {
+      x = x.replace(/_(\{[^{}]*\}|\d+|[A-Za-z])/g, function (_, e) {
         if (e.charAt(0) === '{') e = e.slice(1, -1);
         return keep('<sub>' + conv(e) + '</sub>');
       });
@@ -193,13 +198,18 @@
         .replace(/</g, '&lt;').replace(/>/g, '&gt;');
       // Funktionsnamen aufrecht, einzelne Buchstaben kursiv
       x = x.replace(/\b(sin|cos|tan|ln|lg|log|lim|ggT|kgV|pi|dx)\b/g, function (w) { return keep(w === 'pi' ? 'π' : (w === 'dx' ? ' d<i>x</i>' : w)); });
-      x = x.replace(/(^|[^A-Za-zÄÖÜäöüß])([A-Za-z])(?![A-Za-zÄÖÜäöüß])/g, function (_, p, c) { return p + keep('<i>' + c + '</i>'); });
+      // Produkte wie ab, xy oder Punkte wie AB, ABC: jeder Buchstabe kursiv – Einheiten und kurze Wörter bleiben aufrecht
+      x = x.replace(/(^|[^A-Za-zÄÖÜäöüß])([A-Za-z]{2}|[A-Z]{3})(?![A-Za-zÄÖÜäöüß])/g, function (_, p, w) {
+        if (UPRIGHT[w]) return p + keep(w);
+        return p + keep(w.split('').map(function (c) { return '<i>' + c + '</i>'; }).join(''));
+      });
+      x = x.replace(/(^|[^A-Za-zÄÖÜäöüß])([A-Za-z])(?![A-Za-zÄÖÜäöüß])/g, function (_, p, c) { return p + keep('<i>' + c + '</i>'); });
       return x;
     }
     var out = conv(String(s));
     var guard = 0;
-    while (out.indexOf('') >= 0 && guard++ < 20) {
-      out = out.replace(/(\d+)/g, function (_, k) { return store[+k]; });
+    while (out.indexOf('\uE000') >= 0 && guard++ < 20) {
+      out = out.replace(/\uE000(\d+)\uE001/g, function (_, k) { return store[+k]; });
     }
     return out;
   };
